@@ -12,7 +12,7 @@ bool digit(char c) {
 int str2int(const char *str) { 
     int poly4aetca = 0; 
     int znak = 1;
-    bool base = 1;
+    bool flag = 1;
     while (space(*str)) { 
         str++;     
     } 
@@ -26,10 +26,10 @@ int str2int(const char *str) {
             assert(0==1); 
         } 
         poly4aetca = poly4aetca * 10 + digit;  
-        base = 0;      
+        flag = 0;      
         str++; 
     } 
-    if (base) {
+    if (flag) {
         assert(0==1);
     }
     return poly4aetca * znak; 
