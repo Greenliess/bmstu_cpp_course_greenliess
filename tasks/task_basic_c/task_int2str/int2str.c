@@ -1,43 +1,58 @@
-#include "int2str.h"
+#include <stdio.h>
 #include <limits.h>
 #include <stdlib.h>
 
-
 char* int2str(int number) {
-    if (number == 0) {
-        return "0";
-    }
-
-    if (number == INT_MIN) {
-        return "-2147483648";
-    }
     
-    char* str = calloc(13, sizeof(char));
+    if (number == 0) {
+        char *zero_str = malloc(2 * sizeof(char)); 
+        if (zero_str == NULL) return NULL; 
+        zero_str[0] = '0';
+        zero_str[1] = '\0';
+        return zero_str;
+    }
+
+    // Обработка INT_MIN
+    if (number == INT_MIN) {
+        return strdup("-2147483648"); 
+    }
+
+    
+    int is_negative = number < 0;
+    if (is_negative) {
+        number = -number; 
+    }
+
+    
     int num_len = 0;
-
-    if (number < 0) {
+    int temp = number;
+    do {
         num_len++;
-        str[0] = '-';
-        number *= -1;
-    }
-
-    int number_cl = number;
-    while (number_cl > 0) {
-        number_cl /= 10;
+        temp /= 10;
+    } while (temp > 0);
+    
+    // Учитываем знак
+    if (is_negative) {
         num_len++;
     }
 
-    int digit = 0;
-    int count = 0;
-    char ch = 0;
+    
+    char *str = malloc((num_len + 1) * sizeof(char)); 
+    if (str == NULL) return NULL; 
+
+    
+    str[num_len] = '\0'; 
+    int idx = num_len - 1;
+
     while (number > 0) {
-        digit = number % 10;
-        number = number / 10;
-        ch = digit + '0';
-        str[num_len - 1 - count] = ch;
-        count++;
+        str[idx--] = (number % 10) + '0'; 
+        number /= 10;
     }
-    str[num_len] = '\0';
 
-    return str;
+    
+    if (is_negative) {
+        str[idx] = '-';
+    }
+
+    return str; 
 }
